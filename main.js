@@ -2,6 +2,7 @@ const GPIO = require('onoff').Gpio;
 const awsIot = require('aws-iot-device-sdk');
 
 const testBerryOptions = require('./config/deviceOptions');
+console.log(testBerryOptions);
 
 // aux variables
 let clientTokenUpdate;
