@@ -61,7 +61,7 @@ function updateDeviceState() {
 	deviceState.waterSensor = wetSensor.readSync() ? 'HIGH' : 'OFF';
 	deviceState.timestamp = new Date().getTime();
 	
-	const testBerryState = {"reported":{"desired":{"waterSensor": deviceState.waterSensor, "buzzer": 'DISCONNECTED', "timestamp": deviceState.timestamp}}};
+	const testBerryState = {"state":{"reported":{"waterSensor": deviceState.waterSensor, "buzzer": 'DISCONNECTED', "timestamp": deviceState.timestamp}}};
 
 	// TODO: verify why not updating
 	clientTokenUpdate = thingShadow.update('TestBerry', testBerryState);
