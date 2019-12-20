@@ -32,7 +32,7 @@ device
 		device.publish('WaterSensorPolicy', JSON.stringify({message: 'NodeJS server connected...', deviceState}));
 		
 		thingShadow.register('TestBerry', {}, () => {
-			const testBerryState = {"state":{"desired":{"waterSensor": deviceState.waterSensor, "buzzer": deviceState.buzzer, "timestamp": deviceState.timestamp}}};
+			const testBerryState = {"state":{"reported":{"waterSensor": deviceState.waterSensor, "buzzer": deviceState.buzzer, "timestamp": deviceState.timestamp}}};
 			
 			clientTokenUpdate = thingShadow.update('TestBerry', testBerryState);
 			
@@ -64,7 +64,6 @@ function updateDeviceState() {
 	
 	const testBerryState = {"state":{"reported":{"waterSensor": deviceState.waterSensor, "buzzer": 'DISCONNECTED', "timestamp": deviceState.timestamp}}};
 
-	// TODO: verify why not updating
 	clientTokenUpdate = thingShadow.update('TestBerry', testBerryState);
 	console.log('UPDATED TOKEN: ', clientTokenUpdate);
 }
@@ -78,11 +77,9 @@ function sensor(condition) {
 			buzzer.writeSync(1);
 		}
 		if (condition === 'dry') {
-			// do something
 			console.log('sensor got dry or not sufficiently wet.');
 			prevWet = false;
 			buzzer.writeSync(0);
-			updateDeviceState('HIGH', 'OFF')
 		}
 		updateDeviceState();
 }
@@ -104,6 +101,7 @@ function main() {
 	if (RCtime() === 1 && !prevWet) {
 		sensor('wet');
 		const refresh = setInterval( () => {
+			console.log(wetSensor.readSync());
 			if (wetSensor.readSync())
 				console.log('sensor is still wet');
 			else {
@@ -112,7 +110,7 @@ function main() {
 				// clearInterval(refresh);
 				console.log('waiting for wetness...');
 			}
-		}, 1000);
+		}, 3000);
 	}
 }
 
